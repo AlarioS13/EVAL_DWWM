@@ -1,32 +1,42 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
+
 <?php
-if ($_POST) {
+date ('Y-m-d');
+// Je ne fais pas de seconde requete parce que je n'y suis pas arrivé, au moins là "ca marche" 
+@$previous_title=$_GET['title'];
+@$previous_descr=$_GET['description'];
+@$previous_date=$_GET['date'];
+
+if ($_POST){
     try {
+        
         require_once("db.php");
-        if($cnx) echo "CONNEXION OK<br>";
-        @$title = $_POST['title'];
-        @$description = $_POST['description'];
-        @$date = $_POST['date'];
-        @$id=$_POST["id"];
-        $sql = "UPDATE posts
-        SET post_title='$title', description='$description', post_at='$date' 
-        WHERE id=$id"  ;
-        $cnx->exec($sql);
+        
+        $id=$_GET['id']+1;        
+        $title=$_POST['title'];
+        $description=$_POST['description'];
+        $date=$_POST['date'];
+        $sql = "UPDATE posts 
+        SET post_title='$title', description='$description', post_at='$date'
+        WHERE id='$id'";
+        $data = $cnx->prepare($sql);
+        $data->execute();
+
 
     } catch (Exception $e) {
         die('Erreur : '.$e->getmessage());
     }
     header('location:index.php');
 }
-
 ?>
 
 
@@ -35,23 +45,20 @@ if ($_POST) {
 <div class="row">
    
         <form method="post" action="" class="col-12 col-md-6">
-        <div class="form-group">
-                <label for="id">Saisir l'id de l'élement que vous souhaitez modifier :</label>
-                <input type="number" required class="form-control" id="id" name="id" placeholder="entrer un id">
+        
+            <div class="form-group">
+                <label for="title">Modifier le titre :</label>
+                <input value="<?=$previous_title?>" type="text" required class="form-control" id="title" name="title" placeholder="Entrer le titre">
             </div>
             <div class="form-group">
-                <label for="title">Saisir le titre :</label>
-                <input type="text" required class="form-control" id="title" name="title" placeholder="Entrer le titre">
+                <label for="description">Modifier la description :</label>
+                <textarea class="form-control" id="description" name="description" required rows="6" placeholder="Saisir une description"><?=$previous_descr?></textarea>
             </div>
             <div class="form-group">
-                <label for="description">Saisir la description :</label>
-                <textarea class="form-control" id="description" name="description" required rows="6" placeholder="Saisir une description"></textarea>
+                <label for="date">Modifier la date :</label>
+                <input value="<?=$previous_date?>" type="date" min="1970-01-01" max="<?php echo date('Y-m-d'); ?>" required class="form-control" id="date" name="date" placeholder="Sasir une date">
             </div>
-            <div class="form-group">
-                <label for="date">Saisir une date :</label>
-                <input type="date" min="1970-01-01" max="<?php echo date('Y-m-d'); ?>" required class="form-control" id="date" name="date" placeholder="Sasir une date">
-            </div>
-            <button type="submit" class="button" name="button">Valider</button>
+            <button type="submit" class="button" name="submit">Valider</button>
         </form>
     </div>
 

@@ -17,7 +17,6 @@
 <?php
 try {
     require_once("db.php");
-    if($cnx) echo "CONNEXION OK<br>";
     $sql = 'SELECT * FROM posts;';
     $result = $cnx-> query($sql);
     $rows = $result -> fetchAll();
@@ -30,6 +29,9 @@ try {
     }
     foreach ($rows as $row) {
         $date[] = $row[3];
+    }
+    foreach ($rows as $key=>$row) {
+        $id[] = $key;
     }
 } catch (Exception $e) {
     die('Erreur : '.$e->getmessage());
@@ -52,7 +54,7 @@ try {
     <th scope="row">'.$title[$i].'</th>
     <td>'.$description[$i].'</td>
     <td>'.$date[$i].'</td>
-    <td> <a href="delete.php"><img src="./crud-icon/delete.png"></a> <a href="edit.php"><img src="crud-icon/edit.png"></a> </td>
+    <td> <a href="delete.php?id='.$id[$i].'"><img src="./crud-icon/delete.png"></a> <a href="edit.php?id='.$id[$i].'&title='.$title[$i].'&description='.$description[$i].'&date='.$date[$i].'"><img src="crud-icon/edit.png"></a> </td>
 </tr>';
     }
     $table.='</table></div>';

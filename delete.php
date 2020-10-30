@@ -4,47 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Delete</title>
 </head>
 <body>
 <?php
+            try{
+                require_once("db.php");
+                $id = $_GET["id"];
 
-try {
-    require_once("db.php");
-    if($cnx) echo "CONNEXION OK<br>";
-    $sql = 'INSERT INTO posts (post_title, description, post_at) VALUE
-     ';
-    $result = $cnx-> query($sql);
-    $rows = $result -> fetchAll();
-    $result->closeCursor();
-
-} catch (Exception $e) {
-    die('Erreur : '.$e->getmessage());
-}
-
+                $sql = "DELETE FROM posts WHERE id=$id";
+                $stmt = $cnx->prepare($sql);
+                $stmt-> bindParam(':id', $id);
+                $stmt->execute();
+                header('location:index.php');
+            } catch (Exception $ex) {
+                        die('Erreur : '.$ex->getMessage());
+            }
 ?>
-
-
-
-<h1> Ajouter un article </h1>
-<div class="row">
-   
-        <form method="post" action="" class="col-12 col-md-6">
-            <div class="form-group">
-                <label for="title">Saisir le titre :</label>
-                <input type="text" required class="form-control" id="title" name="title" placeholder="Entrer le titre">
-            </div>
-            <div class="form-group">
-                <label for="description">Saisir la description :</label>
-                <textarea class="form-control" id="description" name="description" required rows="6" placeholder="Saisir une description"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="date">Saisir une date :</label>
-                <input type="date" min="1970-01-01" max="<?php echo date('Y-m-d'); ?>" required class="form-control" id="date" name="date" placeholder="Sasir une date">
-            </div>
-            <button type="submit" class="button" name="button">Valider</button>
-        </form>
-    </div>
 
 </body>
 </html>
