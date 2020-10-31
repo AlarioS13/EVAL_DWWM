@@ -23,15 +23,9 @@ try {
     $result->closeCursor();
     foreach ($rows as $row) {
         $title[] = $row[1];
-    }
-    foreach ($rows as $row) {
         $description[] = $row[2];
-    }
-    foreach ($rows as $row) {
         $date[] = $row[3];
-    }
-    foreach ($rows as $key=>$row) {
-        $id[] = $key;
+        $id[] = $row[0];
     }
 } catch (Exception $e) {
     die('Erreur : '.$e->getmessage());
@@ -54,7 +48,7 @@ try {
     <th scope="row">'.$title[$i].'</th>
     <td>'.$description[$i].'</td>
     <td>'.$date[$i].'</td>
-    <td> <a href="delete.php?id='.$id[$i].'"><img src="./crud-icon/delete.png"></a> <a href="edit.php?id='.$id[$i].'&title='.$title[$i].'&description='.$description[$i].'&date='.$date[$i].'"><img src="crud-icon/edit.png"></a> </td>
+    <td> <a href="delete.php?id='.$id[$i].'"><img src="./crud-icon/delete.png"></a> <a href="edit.php?id='.$id[$i].'"><img src="crud-icon/edit.png"></a> </td>
 </tr>';
     }
     $table.='</table></div>';
