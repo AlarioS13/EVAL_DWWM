@@ -39,7 +39,7 @@ if ($_POST){
         
         require_once("db.php");
         
-        $id=$_GET['id']+1;        
+        $id=$_GET['id'];        
         $title=$_POST['title'];
         $description=$_POST['description'];
         $date=$_POST['date'];
